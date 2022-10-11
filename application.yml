@@ -1,0 +1,135 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: member-service-user-login
+          uri: lb://MEMBER-SERVICE/
+          predicates:
+            - Path=/api/user/login
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: member-service-seller-login
+          uri: lb://MEMBER-SERVICE/
+          predicates:
+            - Path=/api/seller/login
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: member-service-seller-signup
+          uri: lb://MEMBER-SERVICE/
+          predicates:
+            - Path=/api/seller/signup
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: member-service-seller-email
+          uri: lb://MEMBER-SERVICE/
+          predicates:
+            - Path=/api/seller/email
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: member-service-seller-email-confirm
+          uri: lb://MEMBER-SERVICE/
+          predicates:
+            - Path=/api/seller/emailConfirm
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: member-service-user
+          uri: lb://MEMBER-SERVICE/
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: member-service-seller
+          uri: lb://MEMBER-SERVICE/
+          predicates:
+            - Path=/api/seller/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: order-service-seller
+          uri: lb://ORDER-SERVICE/
+          predicates:
+            - Path=/api/seller/orders/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: order-service-user
+          uri: lb://ORDER-SERVICE/
+          predicates:
+            - Path=/api/user/orders/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: product-service-seller
+          uri: lb://PRODUCT-SERVICE/
+          predicates:
+            - Path=/api/seller/product/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: product-service-user
+          uri: lb://PRODUCT-SERVICE/
+          predicates:
+            - Path=/api/user/product/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: product-service-seller-review
+          uri: lb://PRODUCT-SERVICE/
+          predicates:
+            - Path=/api/seller/review/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: product-service-user-review
+          uri: lb://PRODUCT-SERVICE/
+          predicates:
+            - Path=/api/user/review/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: product-service-user-cart
+          uri: lb://PRODUCT-SERVICE/
+          predicates:
+            - Path=/api/user/cart/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: sns-service
+          uri: lb://SNS-SERVICE/
+          predicates:
+            - Path=/api/user/sns/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: sns-service-comment
+          uri: lb://SNS-SERVICE/
+          predicates:
+            - Path=/api/user/sns/comment/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace, busrefresh
+
+
+jwt:
+  secret: token-secret-key-lotte-ecommerce-final-project-team6-onandthefarm-jjang
+  admin-key : 4e2945af65919af52b418b54f26f26c2
